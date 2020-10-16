@@ -242,10 +242,8 @@ public class RasterStreamsToVector implements WhiteboxPlugin {
             double[] gridLengths = new double[]{diagGridRes, gridResX, diagGridRes, gridResY, diagGridRes, gridResX, diagGridRes, gridResY};
             double east = streams.getEast() - gridResX / 2.0;
             double west = streams.getWest() + gridResX / 2.0;
-            double EWRange = east - west;
             double north = streams.getNorth() - gridResY / 2.0;
             double south = streams.getSouth() + gridResY / 2.0;
-            double NSRange = north - south;
             
             WhiteboxRaster pntr = new WhiteboxRaster(pointerHeader, "r");
             
@@ -309,8 +307,8 @@ public class RasterStreamsToVector implements WhiteboxPlugin {
                                 if (flowDir > 0) {
                                     if (flowDir != previousFlowDir) {
                                         // it's a bend in the stream so add this point
-                                        xCoord = west + ((double)x / cols) * EWRange;
-                                        yCoord = north - ((double)y / rows) * NSRange;
+                                        xCoord = west + (double)x * gridResX;
+                                        yCoord = north - (double)y * gridResY;
                                         points.addPoint(xCoord, yCoord);
                                         
                                         previousFlowDir = flowDir;
@@ -362,8 +360,8 @@ public class RasterStreamsToVector implements WhiteboxPlugin {
                                 if (!flag) {
                                     // it's the end of the stream link so
                                     // add the point.
-                                    xCoord = west + ((double)x / cols) * EWRange;
-                                    yCoord = north - ((double)y / rows) * NSRange;
+                                    xCoord = west + (double)x * gridResX;
+                                    yCoord = north - (double)y * gridResY;
                                     points.addPoint(xCoord, yCoord);
                                 }
                                 
